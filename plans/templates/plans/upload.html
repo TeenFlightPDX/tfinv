@@ -1,0 +1,19 @@
+﻿{% extends "main/layout.html" %}
+
+{% block content %}
+
+<div>
+    <h1>CSV Plans Upload</h1>
+</div>
+
+<div>
+    <form action="" enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit" />
+    </form>
+</div>
+
+{% endblock %}
+
+

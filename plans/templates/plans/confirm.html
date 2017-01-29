@@ -1,0 +1,17 @@
+﻿{% extends "main/layout.html" %}
+
+{% block content %}
+
+<div>
+    <h1>Plans Import Confirmation</h1>
+</div>
+
+{% for section in sections %}
+    <div>
+        <a class="btn-link" href="{% url "section" section_number=section.section_number %}" value="{{section}}">{{section}}</a>
+    </div>
+{% endfor %}
+
+{% endblock %}
+
+

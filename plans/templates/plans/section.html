@@ -1,0 +1,86 @@
+﻿{% extends "main/layout.html" %}
+
+{% block content %}
+
+<div>
+
+    <!-- Breadcrumb hierarchy -->
+    <ol class="breadcrumb">
+        <li><a href="{% url 'main:home' %}">Home</a></li>
+        <li><a href="{% url 'plans:home' %}">Plans</a></li>
+        <li class="active">{{ section }}</li>
+    </ol>
+
+    <div class="page-header">
+        <h1>{{ section }}</h1>
+
+        {% if not section.confirmed %}
+        <p class="label label-danger">Warning: This section is not yet confirmed! Please confirm this section to allow it to be displayed.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+{% for page in pages %}
+<!-- Outer accordion for this kit -->
+<div class="panel-group" id="accordion_page_{{page}}">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <!-- Collapse object/link for this kit -->
+
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <a data-toggle="collapse" data-parent="#accordion_page_{{page}}"
+                               href="#collapse_page_{{page}}">
+                                Page {{page}}
+                            </a>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="pull-right">
+                                {{page.getCompletionStatus}}
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+        </div>
+
+        <!-- Inner accordion for sections in the kit-->
+        <div id="collapse_page_{{page}}" class="panel-collapse collapse">
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Step Number</th>
+                            <th>Status</th>
+                            <th>Date Completed</th>
+                            <th>Completed By</th>
+                            <th>Date Verified</th>
+                            <th>Verified By</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for step in page.getConfirmedSteps %}
+                        <tr class="{{step.getStatusStyle}}">
+                            <td>
+                                <a href="{% url "plans:step" section_number=section.section_number page_number=page.page_number step_number=step.step_number %}">
+                                    {{step.step_number}}
+                                </a>
+                            </td>
+                            <td>{{step.get_status_display}}</td>
+                            <td>{{step.date_completed}}</td>
+                            <td></td>
+                            <td>{{step.date_verified}}</td>
+                            <td></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

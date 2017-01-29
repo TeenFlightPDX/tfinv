@@ -1,0 +1,72 @@
+﻿{% extends "main/layout.html" %}
+
+{% block content %}
+
+{% load staticfiles %}
+<div>
+<!-- Breadcrumb hierarchy -->
+<ol class="breadcrumb">
+  <li><a href="{% url "main:home" %}">Home</a></li>
+  <li><a href="{% url "plans:home" %}">Plans</a></li>
+  <li><a href="{% url "plans:section" section_number=section.section_number %}">{{section}}</a></li>
+  <li class="active">{{page.page_number}}-{{step.step_number}}</li>
+</ol>
+
+    <div class="page-header">
+      <div class="row">
+        <div class="col-xs-8">
+          <h1>{{ page }}: {{ step }}</h1>
+        </div>
+        <div class="col-xs-4">
+         <a href="{% url "plans:update" section_number=section.section_number page_number=page.page_number step_number=step.step_number %}"
+         class="btn btn-default" role="button">
+          Update
+         </a>
+        </div>
+      </div>
+        
+      {% if not step.confirmed %}
+        <p class="label label-danger">Warning: This section is not yet confirmed! Please confirm this section to allow it to be displayed.</p>
+      {% endif %}
+    </div>
+
+    <h3>Status: {{step.getStatus}}</h3> <br/>
+
+    <p>{{ step.step_text|linebreaks }}</p>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="panel-title">
+      <div class="row">
+          <div class="col-xs-6">
+              Notes
+          </div>
+          <!-- TODO: Link to add note form 
+          <div class="col-xs-6">
+              <div class="pull-right">
+                <a href="">
+                  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </a>
+              </div>
+          </div>
+          -->
+      </div>
+    </div>
+
+  </div>
+  <div class="panel-body">
+    {% if step.getNotes.count > 0 %}
+    <ul class="list-group">
+      {% for note in step.getNotes %}
+        <li class="list-group-item">{{note}}</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      <p>There are no notes for this step!</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}
+

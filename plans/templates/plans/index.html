@@ -1,0 +1,68 @@
+{% extends "main/layout.html" %}
+{% block content %}
+<div>
+    <!-- Breadcrumb hierarchy -->
+    <ol class="breadcrumb">
+        <li><a href="{% url "main:home" %}">Home</a></li>
+        <li class="active">Plans</li>
+    </ol>
+</div>
+
+    <h1> Teen Flight Master Plans Tracker</h1>
+
+{% for kit in kits %}
+    <!-- Outer accordion for this kit -->
+    <div class="panel-group" id="accordion_kit_{{kit.getCleanedName}}">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <!-- Collapse object/link for this kit -->
+                    <a data-toggle="collapse" data-parent="#accordion_kit_{{kit.getCleanedName}}"
+                       href="#collapse_kit_{{kit.getCleanedName}}">
+                        {{kit}}
+                    </a>
+                </h4>
+            </div>
+
+            <!-- Inner accordion for sections in the kit-->
+            <div id="collapse_kit_{{kit.getCleanedName}}" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="panel-group" id="accordion_kit_{{kit.getCleanedName}}">
+                        {% if kit.getConfirmedSections.count > 0 %}
+                            {% for section in kit.getConfirmedSections %}
+                            <!-- Outer accordion for this section -->
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <!-- Collapse object/link for this section -->
+                                        <a data-parent="#accordion_section_{{section.section_number}}"
+                                           href="{% url "plans:section" section_number=section.section_number %}">
+                                            {{section}}
+                                        </a>
+                                    </h4>
+                                </div>
+                            </div>
+                            <!-- endfor for section loop-->
+                            {% endfor %}
+                        {% else %}
+                            <!-- Outer accordion for this section -->
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <!-- Collapse object/link for this section -->
+                                        <a data-parent="#accordion_section_{{section.section_number}}">
+                                            This kit has no sections yet!
+                                        </a>
+                                    </h4>
+                                </div>
+                            </div>
+                            <!-- endfor for section loop-->
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- endfor for kit loop-->
+{% endfor %}
+{% endblock %}

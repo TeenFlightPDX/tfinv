@@ -21,6 +21,8 @@ import django.contrib.auth.views
 import main.forms
 import main.urls
 
+import plans.urls
+
 from django.contrib import admin
 admin.autodiscover()
 
@@ -46,4 +48,5 @@ urlpatterns = [
         name='logout'),
 
     url(r'^', include(main.urls)),
+    url(r'^plans/', include(plans.urls)),
 ]

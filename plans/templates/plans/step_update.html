@@ -1,0 +1,20 @@
+{% extends "main/layout.html" %}
+
+{% block content %}
+
+<div>
+    <h1>Step Update Form</h1>
+    <h2>{{ page }}: {{ step }}</h2>
+</div>
+
+<div>
+    <form action="" enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit" />
+    </form>
+</div>
+
+{% endblock %}
+
+
