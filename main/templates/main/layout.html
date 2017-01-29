@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }} - TeenFlight Inventory</title>
+    <title>{{ title }} - TeenFlight</title>
         {% load staticfiles %}
         <link rel="stylesheet" type="text/css" href="{% static 'main/content/bootstrap.min.css' %}" />
         <link rel="stylesheet" type="text/css" href="{% static 'main/content/site.css' %}" />
@@ -20,11 +20,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="/" class="navbar-brand">TeenFlight Inventory</a>
+                <a href="/" class="navbar-brand">TeenFlight</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-
+                    <li><a href="{% url 'inv:home' %}">Inventory</a></li>
                 </ul>
                 {% include 'main/loginpartial.html' %}
             </div>
