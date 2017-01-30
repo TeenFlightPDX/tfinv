@@ -1,0 +1,35 @@
+{% extends "main/layout.html" %}
+
+{% load staticfiles %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+<form method="post">
+    {% csrf_token %}
+
+    {{ transaction_form|crispy }}
+
+
+    {{ part_formset.management_form }}
+
+    {% for part_form in part_formset %}
+        <div class="part-formset">
+            {{ part_form}}
+
+        </div>
+    {% endfor %}
+
+    <input type="submit" value="Submit" class="button"/>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'main/scripts/jquery.formset.js' %}"></script>
+<script>
+    $('.part-formset').formset({
+        addText: 'Add Part',
+        deleteText: 'Remove'
+    });
+</script>
+{% endblock %}

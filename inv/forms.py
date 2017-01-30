@@ -1,3 +1,4 @@
+from django import forms
 from django.forms import ModelForm
 
 from .models import Transaction, Part
@@ -9,7 +10,7 @@ class TransactionForm(ModelForm):
         fields = ['users']
 
 
-class PartForm(ModelForm):
-    class Meta:
-        model = Part
-        fields = ['name', 'part_number', 'location']
+class PartForm(forms.Form):
+    name = forms.CharField(max_length=75, required=True)
+    part_number = forms.CharField(max_length=20, required=True)
+    location = forms.CharField(max_length=20, required=False)

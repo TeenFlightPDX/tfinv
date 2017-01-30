@@ -20,4 +20,5 @@ import inv.views
 app_name = 'inv'
 urlpatterns = [
     url(r'^$', inv.views.home, name='home'),
+    url(r'add/$', inv.views.new_transaction, name='new_transaction'),
 ]
