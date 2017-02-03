@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponseRedirect
 from django.urls import reverse
-from django.forms.formsets import formset_factory, BaseFormSet
+from django.forms.formsets import formset_factory
 
-from .forms import PartForm, TransactionForm
-from .models import Transaction, Part
+from .forms import PartForm, TransactionForm, PartFormSet
+from .models import Part
 
 
 def home(request):
@@ -20,11 +20,11 @@ def home(request):
 
 def new_transaction(request):
     # Create the formset, specifying the form and formset we want to use.
-    PartFormSet = formset_factory(PartForm, formset=BaseFormSet)
+    partformset = formset_factory(PartForm, min_num=1, formset=PartFormSet)
 
     if request.method == 'POST':
         transaction_form = TransactionForm(request.POST)
-        part_formset = PartFormSet(request.POST)
+        part_formset = partformset(request.POST)
 
         if transaction_form.is_valid() and part_formset.is_valid():
             transaction = transaction_form.save()
@@ -44,7 +44,7 @@ def new_transaction(request):
             return HttpResponseRedirect(reverse('inv:home'))
     else:
         transaction_form = TransactionForm()
-        part_formset = PartFormSet()
+        part_formset = partformset()
 
     context = {
         'title': 'New Transaction',
