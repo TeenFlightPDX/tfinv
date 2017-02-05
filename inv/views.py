@@ -8,14 +8,16 @@ from django.db import IntegrityError, transaction as db_transaction
 from crispy_forms.layout import Submit
 
 from .forms import PartChangeForm, TransactionForm, PartChangeFormSet, PartChangeFormSetHelper
-from .models import PartChange
+from .models import PartChange, Transaction as transaction_model
+from .tables import TransactionTable
 
 
 def home(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
 
-    context = {'title': 'Inventory'}
+    table = TransactionTable(transaction_model.objects.all())
+    context = {'title': 'Inventory', 'table': table}
 
     return render(request,
                   'inv/index.html',

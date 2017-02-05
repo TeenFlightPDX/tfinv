@@ -16,6 +16,18 @@ class Transaction(models.Model):
     def __str__(self):
         return '%s|%s' % (self.id, self.getParts())
 
+    def getShortPartsStr(self):
+        parts_all = self.getParts()
+        parts_len = parts_all.count()
+
+        if parts_len > 5:
+            parts = [p.part_number for p in self.getParts()[:4]]
+            parts.append('...')
+        else:
+            parts = [p.part_number for p in self.getParts()[:5]]
+
+        return ', '.join(parts)
+
 
 # In the future, we might want to make it so that the same part does not get multiple entries in different transactions
 class PartChange(models.Model):
