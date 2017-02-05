@@ -1,10 +1,12 @@
+from django.contrib import messages
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponseRedirect
 from django.urls import reverse
 from django.forms.formsets import formset_factory
+from django.db import IntegrityError, transaction as db_transaction
 
-from .forms import PartForm, TransactionForm, PartFormSet
-from .models import Part
+from .forms import PartChangeForm, TransactionForm, PartChangeFormSet
+from .models import PartChange
 
 
 def home(request):
@@ -20,11 +22,11 @@ def home(request):
 
 def new_transaction(request):
     # Create the formset, specifying the form and formset we want to use.
-    partformset = formset_factory(PartForm, min_num=1, formset=PartFormSet)
+    partchangeformset = formset_factory(PartChangeForm, min_num=1, extra=0, formset=PartChangeFormSet)
 
     if request.method == 'POST':
         transaction_form = TransactionForm(request.POST)
-        part_formset = partformset(request.POST)
+        part_formset = partchangeformset(request.POST)
 
         if transaction_form.is_valid() and part_formset.is_valid():
             transaction = transaction_form.save()
@@ -37,14 +39,22 @@ def new_transaction(request):
                 location = part_form.cleaned_data.get('location')
 
                 if name and part_number:
-                    new_parts.append(Part(transaction=transaction, name=name,
-                                          part_number=part_number, location=location))
+                    new_parts.append(PartChange(transaction=transaction, name=name,
+                                                part_number=part_number, location=location))
 
-            Part.objects.bulk_create(new_parts)
-            return HttpResponseRedirect(reverse('inv:home'))
+            try:
+                with db_transaction.atomic():
+                    PartChange.objects.bulk_create(new_parts)
+                    messages.success(request, 'You have submitted a transaction.')
+                    return HttpResponseRedirect(reverse('inv:home'))
+
+            except IntegrityError:  # If the transaction failed
+                messages.error(request, 'There was an error saving your transaction.')
+                return HttpResponseRedirect(reverse('inv:new_transaction'))
+
     else:
         transaction_form = TransactionForm()
-        part_formset = partformset()
+        part_formset = partchangeformset()
 
     context = {
         'title': 'New Transaction',

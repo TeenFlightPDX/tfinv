@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from.models import Part, Transaction
+from.models import PartChange, Transaction
 
 
-admin.site.register(Part)
+admin.site.register(PartChange)
 admin.site.register(Transaction)

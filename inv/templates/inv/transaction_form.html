@@ -4,22 +4,70 @@
 
 {% block content %}
 
-<form method="post">
+<h1>Create New Transaction</h1>
+
+{% if messages %}
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endif %}
+
+<form id="transaction_form" method="post" action="">
     {% csrf_token %}
 
     {{ transaction_form }}
 
+    <hr/>
 
     {{ part_formset.management_form }}
 
-    {% for part_form in part_formset %}
-        <div class="part-formset">
-            {{ part_form }}
+    <h2>Parts:</h2>
+
+    {% for form in part_formset.forms %}
+        <div class="form-inline part-formset">
+            <div class="form-group">
+                <label for="{{form.name.id_for_label}}">Name:</label>
+                {{ form.name }}
+                {% if form.name.errors %}
+                    {% for error in form.name.errors %}
+                        {{ error|escape }}
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="{{form.part_number.id_for_label}}">Part Number:</label>
+                {{ form.part_number }}
+                {% if form.part_number.errors %}
+                    {% for error in form.part_number.errors %}
+                        {{ error|escape }}
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="{{form.quantity.id_for_label}}">Quantity:</label>
+                {{ form.quantity }}
+                {% if form.quantity.errors %}
+                    {% for error in form.quantity.errors %}
+                        {{ error|escape }}
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="{{form.location.id_for_label}}">Location:</label>
+                {{ form.location }}
+                {% if form.location.errors %}
+                    {% for error in form.location.errors %}
+                        {{ error|escape }}
+                    {% endfor %}
+                {% endif %}
+            </div>
         </div>
     {% endfor %}
 
-    <input type="submit" value="Submit" class="button"/>
+    <button type="submit" class="btn btn-default">Submit</button>
 </form>
+
+
 {% endblock %}
 
 {% block scripts %}
