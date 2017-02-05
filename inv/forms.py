@@ -1,5 +1,8 @@
 from django import forms
 
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout
+
 from .models import Transaction
 
 
@@ -21,3 +24,10 @@ class PartChangeFormSet(forms.BaseFormSet):
         super(PartChangeFormSet, self).__init__(*args, **kwargs)
         for form in self.forms:
             form.empty_permitted = False
+
+
+class PartChangeFormSetHelper(FormHelper):
+    def __init__(self, *args, **kwargs):
+        super(PartChangeFormSetHelper, self).__init__(*args, **kwargs)
+        self.form_method = 'POST'
+        self.render_required_fields = True

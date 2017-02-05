@@ -5,7 +5,9 @@ from django.urls import reverse
 from django.forms.formsets import formset_factory
 from django.db import IntegrityError, transaction as db_transaction
 
-from .forms import PartChangeForm, TransactionForm, PartChangeFormSet
+from crispy_forms.layout import Submit
+
+from .forms import PartChangeForm, TransactionForm, PartChangeFormSet, PartChangeFormSetHelper
 from .models import PartChange
 
 
@@ -56,10 +58,17 @@ def new_transaction(request):
         transaction_form = TransactionForm()
         part_formset = partchangeformset()
 
+    # Helper for formatting inline formset with crispy forms
+    helper = PartChangeFormSetHelper()
+    helper.template = 'inv/table_inline_formset_js.html'
+    helper.form_class = 'part-formset'
+    helper.add_input(Submit("submit", "Save"))
+
     context = {
         'title': 'New Transaction',
         'transaction_form': transaction_form,
         'part_formset': part_formset,
+        'helper': helper,
     }
 
     return render(request, 'inv/transaction_form.html', context)
