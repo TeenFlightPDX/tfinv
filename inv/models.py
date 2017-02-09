@@ -7,7 +7,7 @@ class Transaction(models.Model):
     # id field w/ auto-increment foreign key automatically set by django
 
     time = models.DateTimeField(auto_now_add=True)
-    users = models.ManyToManyField(User)
+    user = models.ManyToManyField(User)
     approved = models.BooleanField(default=False)
 
     def getParts(self):
@@ -16,7 +16,8 @@ class Transaction(models.Model):
     def __str__(self):
         return '%s|%s' % (self.id, self.getParts())
 
-    def getShortPartsStr(self):
+    @property
+    def parts(self):
         parts_all = self.getParts()
         parts_len = parts_all.count()
 
@@ -27,6 +28,10 @@ class Transaction(models.Model):
             parts = [p.part_number for p in self.getParts()[:5]]
 
         return ', '.join(parts)
+
+    @property
+    def parts_all(self):
+        return ', '.join(self.getParts())
 
 
 # In the future, we might want to make it so that the same part does not get multiple entries in different transactions

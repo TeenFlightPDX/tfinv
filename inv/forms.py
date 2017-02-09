@@ -1,6 +1,8 @@
 from django import forms
 
 from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout
+from crispy_forms.bootstrap import StrictButton
 
 from .models import Transaction
 
@@ -8,7 +10,22 @@ from .models import Transaction
 class TransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction
-        fields = ['users']
+        fields = ['user']
+
+
+class TransactionSearchForm(forms.Form):
+    search = forms.CharField(max_length=100, required=True)
+
+    def __init__(self, *args, **kwargs):
+        super(TransactionSearchForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
+        self.helper.form_class = 'form-inline pull-right'
+        self.helper.field_template = 'bootstrap3/layout/inline_field.html'
+        self.helper.layout = Layout(
+            'search',
+            StrictButton('Search', css_class='btn-default', type='submit'),
+        )
 
 
 class PartChangeForm(forms.Form):

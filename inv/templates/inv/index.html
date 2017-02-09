@@ -2,40 +2,25 @@
 
 {% block content %}
 
+{% load crispy_forms_tags %}
+
 <h1>
   <span>TeenFlight Inventory</span>
-  <button class='btn btn-primary pull-right' href="{% url 'inv:new_transaction' %}">New Transaction</button>
+  <a class='btn btn-primary pull-right' href="{% url 'inv:new_transaction' %}">New Transaction</a>
 </h1>
 
 <hr/>
 
-<p class='pull-right'>Search Form [        ]</p>
+<span>
+    {% crispy search_form %}
+    <h1><span class="label label-default">Transactions:</span></h1>
+</span>
+
+<br/>
 
 <div class='container'>
 {% load django_tables2 %}
  {% render_table table "django_tables2/bootstrap.html" %}
 </div>
-
-<table class="table table-condensed">
-<thead>
-      <tr>
-        <th>ID</th>
-        <th>Date</th>
-        <th>Parts</th>
-        <th>Users</th>
-      </tr>
-    </thead>
-    <tbody>
-    {% for transaction in transaction_queryset %}
-        <tr>
-            <td>{{ transaction.id }}</td>
-            <td>{{ transaction.time }}</td>
-            <td>{{ transaction.getShortPartsStr }}</td>
-            <td>{{ transaction.users }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-
-</table>
 
 {% endblock %}

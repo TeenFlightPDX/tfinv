@@ -1,0 +1,40 @@
+{% extends "main/layout.html" %}
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+
+
+<h1><span class="label label-default">Transaction Info:</span></h1>
+
+<div class="table-container">  
+    <table class="table"> 
+        <thead>
+            <tr>                  
+                <th>ID</th>
+                <th>Time</th>
+                <th>User</th>
+                <th>Approved</th>
+            </tr>
+            </thead>  
+            <tbody>    
+                <tr>
+                    <td>{{ transaction.id }}</td>
+                    <td>{{ transaction.time }}</td>
+                    <td>{{ transaction.user }}</td>
+                    <td><span class="{{ transaction.approved }}">✘</span></td>
+                </tr>                              
+            </tbody>
+    </table>
+</div>
+
+<hr/>
+
+<h3><span class="label label-default">Parts:</span></h3>
+
+<div class='container'>
+{% load django_tables2 %}
+ {% render_table table "django_tables2/bootstrap.html" %}
+</div>
+
+{% endblock %}

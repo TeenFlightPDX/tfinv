@@ -20,5 +20,6 @@ import inv.views
 app_name = 'inv'
 urlpatterns = [
     url(r'^$', inv.views.home, name='home'),
-    url(r'add/$', inv.views.new_transaction, name='new_transaction'),
+    url(r'^add/$', inv.views.new_transaction, name='new_transaction'),
+    url(r'^view/(?P<id>[0-9]+)/$', inv.views.transaction_view, name='transaction_view'),
 ]

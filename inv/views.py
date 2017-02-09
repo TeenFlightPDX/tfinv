@@ -7,21 +7,48 @@ from django.db import IntegrityError, transaction as db_transaction
 
 from crispy_forms.layout import Submit
 
-from .forms import PartChangeForm, TransactionForm, PartChangeFormSet, PartChangeFormSetHelper
-from .models import PartChange, Transaction as transaction_model
-from .tables import TransactionTable
+from .forms import PartChangeForm, TransactionForm, PartChangeFormSet, PartChangeFormSetHelper, TransactionSearchForm
+from .models import PartChange, Transaction
+from .tables import TransactionTable, PartChangeTable
 
 
 def home(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
 
-    table = TransactionTable(transaction_model.objects.all())
-    context = {'title': 'Inventory', 'table': table}
+    results = Transaction.objects.all()
 
-    return render(request,
-                  'inv/index.html',
-                  context)
+    # search = ''
+
+    if request.method == 'POST':
+        search_form = TransactionSearchForm(request.POST)
+
+        # if search_form.is_valid():
+        # search = search_form.cleaned_data['search']
+        # TODO: filter the queryset with the search term
+    else:
+        search_form = TransactionSearchForm()
+
+    table = TransactionTable(results)
+    table.paginate(page=request.GET.get('page', 1), per_page=25)
+    context = {'title': 'Inventory', 'table': table, 'search_form': search_form}
+
+    return render(request, 'inv/index.html', context)
+
+
+def transaction_view(request, id):
+    try:
+        transaction = Transaction.objects.get(id=id)
+        parts = transaction.getParts()
+    except (Transaction.DoesNotExist, ValueError):
+        # Error - invalid page, return to home
+        return HttpResponseRedirect(reverse('inv:home'))
+
+    table = PartChangeTable(parts)
+    table.paginate(page=request.GET.get('page', 1), per_page=25)
+    context = {'title': 'Transaction Detail', 'table': table, 'transaction': transaction}
+
+    return render(request, 'inv/transaction.html', context)
 
 
 def new_transaction(request):
@@ -58,7 +85,7 @@ def new_transaction(request):
 
     else:
         transaction_form = TransactionForm()
-        part_formset = partchangeformset()
+        part_formset = partchangeformset(initial=[{'quantity': 1}])
 
     # Helper for formatting inline formset with crispy forms
     helper = PartChangeFormSetHelper()
