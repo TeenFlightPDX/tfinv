@@ -14,6 +14,8 @@ class TransactionTable(tables.Table):
     class Meta:
         model = Transaction
         fields = ('id', 'time', 'parts', 'user', 'approved', 'view')
+        attrs = {'class': 'table table-striped table-hover'}
+        template = 'django_tables2/bootstrap.html'
 
 
 class PartChangeTable(tables.Table):
