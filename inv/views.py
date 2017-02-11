@@ -6,6 +6,7 @@ from django.forms.formsets import formset_factory
 from django.db import IntegrityError, transaction as db_transaction
 
 from crispy_forms.layout import Submit
+from django_tables2 import RequestConfig
 
 from .forms import PartChangeForm, TransactionForm, PartChangeFormSet, PartChangeFormSetHelper, TransactionSearchForm
 from .models import PartChange, Transaction
@@ -29,8 +30,8 @@ def home(request):
     else:
         search_form = TransactionSearchForm()
 
-    table = TransactionTable(results)
-    table.paginate(page=request.GET.get('page', 1), per_page=25)
+    table = TransactionTable(results, order_by='-time')
+    RequestConfig(request, paginate={'per_page': 10}).configure(table)
     context = {'title': 'Inventory', 'table': table, 'search_form': search_form}
 
     return render(request, 'inv/index.html', context)
@@ -45,7 +46,7 @@ def transaction_view(request, id):
         return HttpResponseRedirect(reverse('inv:home'))
 
     table = PartChangeTable(parts)
-    table.paginate(page=request.GET.get('page', 1), per_page=25)
+    RequestConfig(request, paginate={'per_page': 10}).configure(table)
     context = {'title': 'Transaction Detail', 'table': table, 'transaction': transaction}
 
     return render(request, 'inv/transaction.html', context)
