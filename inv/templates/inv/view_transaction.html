@@ -4,8 +4,15 @@
 
 {% load crispy_forms_tags %}
 
+<h1>
+    <span class="label label-default">Transaction Info:</span>
 
-<h1><span class="label label-default">Transaction Info:</span></h1>
+    {% if user.is_authenticated %}
+        {% if user.get_username == transaction.user.username %}
+            <a class='btn btn-primary pull-right' href="{% url 'inv:edit_transaction' id=transaction.id %}">Edit</a>
+        {% endif %}
+    {% endif %}
+</h1>
 
 <div class="table-container">  
     <table class="table"> 

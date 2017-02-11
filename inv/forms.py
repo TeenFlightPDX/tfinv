@@ -4,14 +4,6 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout
 from crispy_forms.bootstrap import StrictButton
 
-from .models import Transaction
-
-
-class TransactionForm(forms.ModelForm):
-    class Meta:
-        model = Transaction
-        fields = ['user']
-
 
 class TransactionSearchForm(forms.Form):
     search = forms.CharField(max_length=100, required=True)

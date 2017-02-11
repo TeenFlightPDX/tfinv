@@ -21,5 +21,6 @@ app_name = 'inv'
 urlpatterns = [
     url(r'^$', inv.views.home, name='home'),
     url(r'^add/$', inv.views.new_transaction, name='new_transaction'),
-    url(r'^view/(?P<id>[0-9]+)/$', inv.views.transaction_view, name='transaction_view'),
+    url(r'^view/(?P<id>[0-9]+)/$', inv.views.view_transaction, name='view_transaction'),
+    url(r'^edit/(?P<id>[0-9]+)/$', inv.views.edit_transaction, name='edit_transaction'),
 ]

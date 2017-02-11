@@ -3,17 +3,17 @@ import django_tables2 as tables
 from .models import Transaction, PartChange
 
 
-class TransactionTable(tables.Table):
+class TransactionViewTable(tables.Table):
     parts = tables.Column(orderable=False)
 
     view = tables.TemplateColumn(
-        '<a href="{% url "inv:transaction_view" id=record.id %}" class="btn btn-primary">View</a>',
+        '<a href="{% url "inv:view_transaction" id=record.id %}" class="btn btn-primary">View</a>',
         orderable=False,
         verbose_name='')
 
     class Meta:
         model = Transaction
-        fields = ('id', 'time', 'parts', 'user', 'approved', 'view')
+        fields = ('id', 'time', 'parts', 'user', 'view')
         attrs = {'class': 'table table-striped table-hover'}
         template = 'django_tables2/bootstrap.html'
 

@@ -1,0 +1,30 @@
+{% extends "main/layout.html" %}
+
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<h1>Create New Transaction</h1>
+{% if messages %}
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endif %}
+
+<form id="transaction_form" method="post" action="">
+    {% csrf_token %}
+
+    <hr/>
+
+    {{ part_formset.management_form }}
+
+    <h2>Parts:</h2>
+
+    {% crispy part_formset helper%}
+
+</form>
+
+
+{% endblock %}
+

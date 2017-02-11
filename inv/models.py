@@ -7,7 +7,7 @@ class Transaction(models.Model):
     # id field w/ auto-increment foreign key automatically set by django
 
     time = models.DateTimeField(auto_now_add=True)
-    user = models.ManyToManyField(User)
+    user = models.ForeignKey(User, unique=False)
     approved = models.BooleanField(default=False)
 
     def getParts(self):
